@@ -1,10 +1,10 @@
-angular.module('org.beontime.features.chat.services', [])
+angular.module('org.beontime.features.contacts.services', [])
 
-.factory('Chats', function() {
+.factory('Contacts', function() {
   // Might use a resource here that returns a JSON array
 
   // Some fake testing data
-  var chats = [{
+  var contacts = [{
     id: 0,
     name: 'Ben Sparrow',
     lastText: 'You on your way?',
@@ -33,15 +33,15 @@ angular.module('org.beontime.features.chat.services', [])
 
   return {
     all: function() {
-      return chats;
+      return contacts;
     },
-    remove: function(chat) {
-      chats.splice(chats.indexOf(chat), 1);
+    remove: function(contact) {
+      contacts.splice(contacts.indexOf(contact), 1);
     },
-    get: function(chatId) {
-      for (var i = 0; i < chats.length; i++) {
-        if (chats[i].id === parseInt(chatId)) {
-          return chats[i];
+    get: function(contactId) {
+      for (var i = 0; i < contacts.length; i++) {
+        if (contacts[i].id === parseInt(contactId)) {
+          return contacts[i];
         }
       }
       return null;

@@ -19,14 +19,12 @@
 
 package org.apache.cordova;
 
+import android.app.Activity;
+import android.os.Bundle;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
-import org.apache.cordova.LOG;
-
-import android.app.Activity;
-import android.os.Bundle;
 
 public class CordovaPreferences {
     private HashMap<String, String> prefs = new HashMap<String, String>(20);
@@ -47,11 +45,11 @@ public class CordovaPreferences {
     public void set(String name, int value) {
         set(name, "" + value);
     }
-    
+
     public void set(String name, double value) {
         set(name, "" + value);
     }
-    
+
     public Map<String, String> getAll() {
         return prefs;
     }
@@ -77,11 +75,11 @@ public class CordovaPreferences {
         String value = prefs.get(name);
         if (value != null) {
             // Use Integer.decode() can't handle it if the highest bit is set.
-            return (int)(long)Long.decode(value);
+            return (int) (long) Long.decode(value);
         } else if (preferencesBundleExtras != null) {
             Object bundleValue = preferencesBundleExtras.get(name);
             if (bundleValue instanceof String) {
-                return Integer.valueOf((String)bundleValue);
+                return Integer.valueOf((String) bundleValue);
             }
             // Gives a nice warning if type is wrong.
             return preferencesBundleExtras.getInt(name, defaultValue);
@@ -97,7 +95,7 @@ public class CordovaPreferences {
         } else if (preferencesBundleExtras != null) {
             Object bundleValue = preferencesBundleExtras.get(name);
             if (bundleValue instanceof String) {
-                return Double.valueOf((String)bundleValue);
+                return Double.valueOf((String) bundleValue);
             }
             // Gives a nice warning if type is wrong.
             return preferencesBundleExtras.getDouble(name, defaultValue);
@@ -133,40 +131,29 @@ public class CordovaPreferences {
             } else if (name.equals("splashscreen")) {
                 // Note: We should probably pass in the classname for the variable splash on splashscreen!
                 int resource = action.getResources().getIdentifier(value, "drawable", action.getClass().getPackage().getName());
-                if(resource == 0) {
+                if (resource == 0) {
                     resource = action.getResources().getIdentifier(value, "drawable", action.getPackageName());
                 }
                 action.getIntent().putExtra(name, resource);
-            }
-            else if(name.equals("backgroundcolor")) {
-                int asInt = (int)(long)Long.decode(value);
+            } else if (name.equals("backgroundcolor")) {
+                int asInt = (int) (long) Long.decode(value);
                 action.getIntent().putExtra(name, asInt);
-            }
-            else if(name.equals("loadurltimeoutvalue")) {
+            } else if (name.equals("loadurltimeoutvalue")) {
                 int asInt = Integer.decode(value);
                 action.getIntent().putExtra(name, asInt);
-            }
-            else if(name.equals("splashscreendelay")) {
+            } else if (name.equals("splashscreendelay")) {
                 int asInt = Integer.decode(value);
                 action.getIntent().putExtra(name, asInt);
-            }
-            else if(name.equals("keeprunning"))
-            {
+            } else if (name.equals("keeprunning")) {
                 boolean asBool = Boolean.parseBoolean(value);
                 action.getIntent().putExtra(name, asBool);
-            }
-            else if(name.equals("inappbrowserstorageenabled"))
-            {
+            } else if (name.equals("inappbrowserstorageenabled")) {
                 boolean asBool = Boolean.parseBoolean(value);
                 action.getIntent().putExtra(name, asBool);
-            }
-            else if(name.equals("disallowoverscroll"))
-            {
+            } else if (name.equals("disallowoverscroll")) {
                 boolean asBool = Boolean.parseBoolean(value);
                 action.getIntent().putExtra(name, asBool);
-            }
-            else
-            {
+            } else {
                 action.getIntent().putExtra(name, value);
             }
         }

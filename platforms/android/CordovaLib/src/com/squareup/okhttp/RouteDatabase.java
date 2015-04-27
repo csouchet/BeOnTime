@@ -18,6 +18,7 @@ package com.squareup.okhttp;
 import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
 import javax.net.ssl.SSLHandshakeException;
 
 /**
@@ -28,30 +29,36 @@ import javax.net.ssl.SSLHandshakeException;
  * preferred.
  */
 public final class RouteDatabase {
-  private final Set<Route> failedRoutes = new LinkedHashSet<Route>();
+    private final Set<Route> failedRoutes = new LinkedHashSet<Route>();
 
-  /** Records a failure connecting to {@code failedRoute}. */
-  public synchronized void failed(Route failedRoute, IOException failure) {
-    failedRoutes.add(failedRoute);
+    /**
+     * Records a failure connecting to {@code failedRoute}.
+     */
+    public synchronized void failed(Route failedRoute, IOException failure) {
+        failedRoutes.add(failedRoute);
 
-    if (!(failure instanceof SSLHandshakeException)) {
-      // If the problem was not related to SSL then it will also fail with
-      // a different TLS mode therefore we can be proactive about it.
-      failedRoutes.add(failedRoute.flipTlsMode());
+        if (!(failure instanceof SSLHandshakeException)) {
+            // If the problem was not related to SSL then it will also fail with
+            // a different TLS mode therefore we can be proactive about it.
+            failedRoutes.add(failedRoute.flipTlsMode());
+        }
     }
-  }
 
-  /** Records success connecting to {@code failedRoute}. */
-  public synchronized void connected(Route route) {
-    failedRoutes.remove(route);
-  }
+    /**
+     * Records success connecting to {@code failedRoute}.
+     */
+    public synchronized void connected(Route route) {
+        failedRoutes.remove(route);
+    }
 
-  /** Returns true if {@code route} has failed recently and should be avoided. */
-  public synchronized boolean shouldPostpone(Route route) {
-    return failedRoutes.contains(route);
-  }
+    /**
+     * Returns true if {@code route} has failed recently and should be avoided.
+     */
+    public synchronized boolean shouldPostpone(Route route) {
+        return failedRoutes.contains(route);
+    }
 
-  public synchronized int failedRoutesCount() {
-    return failedRoutes.size();
-  }
+    public synchronized int failedRoutesCount() {
+        return failedRoutes.size();
+    }
 }

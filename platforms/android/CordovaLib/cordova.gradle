@@ -17,8 +17,10 @@
        under the License.
 */
 
-import java.util.regex.Pattern
+
 import groovy.swing.SwingBuilder
+
+import java.util.regex.Pattern
 
 String doEnsureValueExists(filePath, props, key) {
     if (props.get(key) == null) {
@@ -38,8 +40,8 @@ String doGetProjectTarget() {
 String[] getAvailableBuildTools() {
     def buildToolsDir = new File(getAndroidSdkDir(), "build-tools")
     buildToolsDir.list()
-        .findAll { it ==~ /[0-9.]+/ }
-        .sort { a, b -> compareVersions(b, a) }
+            .findAll { it ==~ /[0-9.]+/ }
+            .sort { a, b -> compareVersions(b, a) }
 }
 
 String doFindLatestInstalledBuildTools(String minBuildToolsVersion) {
@@ -54,15 +56,15 @@ String doFindLatestInstalledBuildTools(String minBuildToolsVersion) {
         def highestBuildToolsVersion = availableBuildToolsVersions[0]
         if (compareVersions(highestBuildToolsVersion, minBuildToolsVersion) < 0) {
             throw new RuntimeException(
-                "No usable Android build tools found. Highest installed version is " +
-                highestBuildToolsVersion + "; minimum version required is " +
-                minBuildToolsVersion + ".")
+                    "No usable Android build tools found. Highest installed version is " +
+                            highestBuildToolsVersion + "; minimum version required is " +
+                            minBuildToolsVersion + ".")
         }
         highestBuildToolsVersion
     } else {
         throw new RuntimeException(
-            "No installed build tools found. Please install the Android build tools version " +
-            minBuildToolsVersion + " or higher.")
+                "No installed build tools found. Please install the Android build tools version " +
+                        minBuildToolsVersion + " or higher.")
     }
 }
 
@@ -71,7 +73,7 @@ String doFindLatestInstalledBuildTools(String minBuildToolsVersion) {
 // the two lists.
 int compareVersionList(Collection aParts, Collection bParts) {
     def pairs = ([aParts, bParts]).transpose()
-    pairs.findResult(aParts.size()-bParts.size()) {it[0] - it[1] != 0 ? it[0] - it[1] : null}
+    pairs.findResult(aParts.size() - bParts.size()) { it[0] - it[1] != 0 ? it[0] - it[1] : null }
 }
 
 // Compare two version strings, such as "19.0.0" and "18.1.1.0". If all matched
@@ -82,8 +84,8 @@ int compareVersionList(Collection aParts, Collection bParts) {
 //   "19.1.0" > "19.0.1"
 //   "19" > "18.999.999"
 int compareVersions(String a, String b) {
-    def aParts = a.tokenize('.').collect {it.toInteger()}
-    def bParts = b.tokenize('.').collect {it.toInteger()}
+    def aParts = a.tokenize('.').collect { it.toInteger() }
+    def bParts = b.tokenize('.').collect { it.toInteger() }
     compareVersionList(aParts, bParts)
 }
 
@@ -115,7 +117,7 @@ String getAndroidSdkDir() {
     }
     if (androidSdkDir == null) {
         throw new RuntimeException(
-            "Unable to determine Android SDK directory.")
+                "Unable to determine Android SDK directory.")
     }
     androidSdkDir
 }

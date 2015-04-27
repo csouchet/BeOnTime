@@ -18,27 +18,25 @@
 */
 package org.apache.cordova.device;
 
-import java.util.TimeZone;
+import android.provider.Settings;
 
-import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.provider.Settings;
+import java.util.TimeZone;
 
 public class Device extends CordovaPlugin {
     public static final String TAG = "Device";
-
-    public static String platform;                            // Device OS
-    public static String uuid;                                // Device UUID
-
     private static final String ANDROID_PLATFORM = "Android";
     private static final String AMAZON_PLATFORM = "amazon-fireos";
     private static final String AMAZON_DEVICE = "Amazon";
+    public static String platform;                            // Device OS
+    public static String uuid;                                // Device UUID
 
     /**
      * Constructor.
@@ -61,10 +59,10 @@ public class Device extends CordovaPlugin {
     /**
      * Executes the request and returns PluginResult.
      *
-     * @param action            The action to execute.
-     * @param args              JSONArry of arguments for the plugin.
-     * @param callbackContext   The callback id used when calling back into JavaScript.
-     * @return                  True if the action was valid, false if not.
+     * @param action          The action to execute.
+     * @param args            JSONArry of arguments for the plugin.
+     * @param callbackContext The callback id used when calling back into JavaScript.
+     * @return True if the action was valid, false if not.
      */
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("getDeviceInfo")) {
@@ -75,8 +73,7 @@ public class Device extends CordovaPlugin {
             r.put("model", this.getModel());
             r.put("manufacturer", this.getManufacturer());
             callbackContext.success(r);
-        }
-        else {
+        } else {
             return false;
         }
         return true;
@@ -88,7 +85,7 @@ public class Device extends CordovaPlugin {
 
     /**
      * Get the OS name.
-     * 
+     *
      * @return
      */
     public String getPlatform() {
@@ -125,6 +122,7 @@ public class Device extends CordovaPlugin {
         String manufacturer = android.os.Build.MANUFACTURER;
         return manufacturer;
     }
+
     /**
      * Get the OS version.
      *
@@ -148,7 +146,7 @@ public class Device extends CordovaPlugin {
 
     /**
      * Function to check if the device is manufactured by Amazon
-     * 
+     *
      * @return
      */
     public boolean isAmazonDevice() {

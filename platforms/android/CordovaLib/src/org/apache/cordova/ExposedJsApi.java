@@ -28,9 +28,9 @@ import org.json.JSONException;
  * cordova-js/lib/android/plugin/android/promptbasednativeapi.js
  */
 /* package */ class ExposedJsApi {
-    
+
     private CordovaBridge bridge;
-    
+
     public ExposedJsApi(CordovaBridge bridge) {
         this.bridge = bridge;
     }
@@ -39,12 +39,12 @@ import org.json.JSONException;
     public String exec(int bridgeSecret, String service, String action, String callbackId, String arguments) throws JSONException, IllegalAccessException {
         return bridge.jsExec(bridgeSecret, service, action, callbackId, arguments);
     }
-    
+
     @JavascriptInterface
     public void setNativeToJsBridgeMode(int bridgeSecret, int value) throws IllegalAccessException {
         bridge.jsSetNativeToJsBridgeMode(bridgeSecret, value);
     }
-    
+
     @JavascriptInterface
     public String retrieveJsMessages(int bridgeSecret, boolean fromOnlineEvent) throws IllegalAccessException {
         return bridge.jsRetrieveJsMessages(bridgeSecret, fromOnlineEvent);

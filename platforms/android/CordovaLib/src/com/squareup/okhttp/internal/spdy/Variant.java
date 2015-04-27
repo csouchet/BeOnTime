@@ -18,20 +18,22 @@ package com.squareup.okhttp.internal.spdy;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/** A version and dialect of the framed socket protocol. */
+/**
+ * A version and dialect of the framed socket protocol.
+ */
 interface Variant {
-  Variant SPDY3 = new Spdy3();
-  Variant HTTP_20_DRAFT_06 = new Http20Draft06();
+    Variant SPDY3 = new Spdy3();
+    Variant HTTP_20_DRAFT_06 = new Http20Draft06();
 
-  /**
-   * @param client true if this is the HTTP client's reader, reading frames from
-   *     a peer SPDY or HTTP/2 server.
-   */
-  FrameReader newReader(InputStream in, boolean client);
+    /**
+     * @param client true if this is the HTTP client's reader, reading frames from
+     *               a peer SPDY or HTTP/2 server.
+     */
+    FrameReader newReader(InputStream in, boolean client);
 
-  /**
-   * @param client true if this is the HTTP client's writer, writing frames to a
-   *     peer SPDY or HTTP/2 server.
-   */
-  FrameWriter newWriter(OutputStream out, boolean client);
+    /**
+     * @param client true if this is the HTTP client's writer, writing frames to a
+     *               peer SPDY or HTTP/2 server.
+     */
+    FrameWriter newWriter(OutputStream out, boolean client);
 }

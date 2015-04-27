@@ -17,7 +17,10 @@
        specific language governing permissions and limitations
        under the License.
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="org.apache.cordova" android:versionName="1.0" android:versionCode="1">
-    <uses-sdk android:minSdkVersion="10" />
+<manifest package="org.apache.cordova"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          android:versionCode="1"
+          android:versionName="1.0">
+
+    <uses-sdk android:minSdkVersion="10"/>
 </manifest>

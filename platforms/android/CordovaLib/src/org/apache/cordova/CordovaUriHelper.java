@@ -26,25 +26,24 @@ import android.os.Build;
 import android.webkit.WebView;
 
 class CordovaUriHelper {
-    
+
     private static final String TAG = "CordovaUriHelper";
-    
+
     private CordovaWebView appView;
     private CordovaInterface cordova;
-    
-    CordovaUriHelper(CordovaInterface cdv, CordovaWebView webView)
-    {
+
+    CordovaUriHelper(CordovaInterface cdv, CordovaWebView webView) {
         appView = webView;
         cordova = cdv;
     }
-    
+
     /**
      * Give the host application a chance to take over the control when a new url
      * is about to be loaded in the current WebView.
      *
-     * @param view          The WebView that is initiating the callback.
-     * @param url           The url to be loaded.
-     * @return              true to override, false for default behavior
+     * @param view The WebView that is initiating the callback.
+     * @param url  The url to be loaded.
+     * @return true to override, false for default behavior
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
     boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -53,19 +52,14 @@ class CordovaUriHelper {
             // Do nothing other than what the plugins wanted.
             // If any returned true, then the request was handled.
             return true;
-        }
-        else if(url.startsWith("file://") | url.startsWith("data:"))
-        {
+        } else if (url.startsWith("file://") | url.startsWith("data:")) {
             //This directory on WebKit/Blink based webviews contains SQLite databases!
             //DON'T CHANGE THIS UNLESS YOU KNOW WHAT YOU'RE DOING!
             return url.contains("app_webview");
-        }
-        else if (appView.getWhitelist().isUrlWhiteListed(url)) {
+        } else if (appView.getWhitelist().isUrlWhiteListed(url)) {
             // Allow internal navigation
             return false;
-        }
-        else if (appView.getExternalWhitelist().isUrlWhiteListed(url))
-        {
+        } else if (appView.getExternalWhitelist().isUrlWhiteListed(url)) {
             try {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(url));

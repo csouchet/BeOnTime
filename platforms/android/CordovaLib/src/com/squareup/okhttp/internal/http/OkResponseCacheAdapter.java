@@ -17,6 +17,7 @@ package com.squareup.okhttp.internal.http;
 
 import com.squareup.okhttp.OkResponseCache;
 import com.squareup.okhttp.ResponseSource;
+
 import java.io.IOException;
 import java.net.CacheRequest;
 import java.net.CacheResponse;
@@ -28,30 +29,37 @@ import java.util.List;
 import java.util.Map;
 
 public final class OkResponseCacheAdapter implements OkResponseCache {
-  private final ResponseCache responseCache;
-  public OkResponseCacheAdapter(ResponseCache responseCache) {
-    this.responseCache = responseCache;
-  }
+    private final ResponseCache responseCache;
 
-  @Override public CacheResponse get(URI uri, String requestMethod,
-      Map<String, List<String>> requestHeaders) throws IOException {
-    return responseCache.get(uri, requestMethod, requestHeaders);
-  }
+    public OkResponseCacheAdapter(ResponseCache responseCache) {
+        this.responseCache = responseCache;
+    }
 
-  @Override public CacheRequest put(URI uri, URLConnection urlConnection) throws IOException {
-    return responseCache.put(uri, urlConnection);
-  }
+    @Override
+    public CacheResponse get(URI uri, String requestMethod,
+                             Map<String, List<String>> requestHeaders) throws IOException {
+        return responseCache.get(uri, requestMethod, requestHeaders);
+    }
 
-  @Override public void maybeRemove(String requestMethod, URI uri) throws IOException {
-  }
+    @Override
+    public CacheRequest put(URI uri, URLConnection urlConnection) throws IOException {
+        return responseCache.put(uri, urlConnection);
+    }
 
-  @Override public void update(CacheResponse conditionalCacheHit, HttpURLConnection connection)
-      throws IOException {
-  }
+    @Override
+    public void maybeRemove(String requestMethod, URI uri) throws IOException {
+    }
 
-  @Override public void trackConditionalCacheHit() {
-  }
+    @Override
+    public void update(CacheResponse conditionalCacheHit, HttpURLConnection connection)
+            throws IOException {
+    }
 
-  @Override public void trackResponse(ResponseSource source) {
-  }
+    @Override
+    public void trackConditionalCacheHit() {
+    }
+
+    @Override
+    public void trackResponse(ResponseSource source) {
+    }
 }

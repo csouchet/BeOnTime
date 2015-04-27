@@ -22,16 +22,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
 
-import org.apache.cordova.CordovaInterface;
-import org.apache.cordova.LOG;
-
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.util.Locale;
 
 @Deprecated // Deprecated in 3.1. To be removed in 4.0.
@@ -44,7 +37,7 @@ public class FileHelper {
      * If the given URI string represents a content:// URI, the real path is retrieved from the media store.
      *
      * @param uriString the URI string of the audio/image/video
-     * @param cordova the current application context
+     * @param cordova   the current application context
      * @return the full path to the file
      */
     @SuppressWarnings("deprecation")
@@ -52,7 +45,7 @@ public class FileHelper {
         String realPath = null;
 
         if (uriString.startsWith("content://")) {
-            String[] proj = { _DATA };
+            String[] proj = {_DATA};
             Cursor cursor = cordova.getActivity().managedQuery(Uri.parse(uriString), proj, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(_DATA);
             cursor.moveToFirst();
@@ -77,7 +70,7 @@ public class FileHelper {
      * Returns the real path of the given URI.
      * If the given URI is a content:// URI, the real path is retrieved from the media store.
      *
-     * @param uri the URI of the audio/image/video
+     * @param uri     the URI of the audio/image/video
      * @param cordova the current application context
      * @return the full path to the file
      */
@@ -89,7 +82,7 @@ public class FileHelper {
      * Returns an input stream based on given URI string.
      *
      * @param uriString the URI string from which to obtain the input stream
-     * @param cordova the current application context
+     * @param cordova   the current application context
      * @return an input stream into the data at the given URI or null if given an invalid URI string
      * @throws IOException
      */
@@ -100,7 +93,7 @@ public class FileHelper {
         } else if (uriString.startsWith("file://")) {
             int question = uriString.indexOf("?");
             if (question > -1) {
-            	uriString = uriString.substring(0,question);
+                uriString = uriString.substring(0, question);
             }
             if (uriString.startsWith("file:///android_asset/")) {
                 Uri uri = Uri.parse(uriString);
@@ -141,7 +134,7 @@ public class FileHelper {
         }
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
     }
-    
+
     /**
      * Returns the mime type of the data specified by the given URI string.
      *

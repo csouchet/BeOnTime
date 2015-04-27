@@ -20,24 +20,41 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.List;
 
-/** Writes transport frames for SPDY/3 or HTTP/2.0. */
+/**
+ * Writes transport frames for SPDY/3 or HTTP/2.0.
+ */
 public interface FrameWriter extends Closeable {
-  /** HTTP/2.0 only. */
-  void connectionHeader() throws IOException;
+    /**
+     * HTTP/2.0 only.
+     */
+    void connectionHeader() throws IOException;
 
-  /** SPDY/3 only. */
-  void flush() throws IOException;
-  void synStream(boolean outFinished, boolean inFinished, int streamId, int associatedStreamId,
-      int priority, int slot, List<String> nameValueBlock) throws IOException;
-  void synReply(boolean outFinished, int streamId, List<String> nameValueBlock) throws IOException;
-  void headers(int streamId, List<String> nameValueBlock) throws IOException;
-  void rstStream(int streamId, ErrorCode errorCode) throws IOException;
-  void data(boolean outFinished, int streamId, byte[] data) throws IOException;
-  void data(boolean outFinished, int streamId, byte[] data, int offset, int byteCount)
-      throws IOException;
-  void settings(Settings settings) throws IOException;
-  void noop() throws IOException;
-  void ping(boolean reply, int payload1, int payload2) throws IOException;
-  void goAway(int lastGoodStreamId, ErrorCode errorCode) throws IOException;
-  void windowUpdate(int streamId, int deltaWindowSize) throws IOException;
+    /**
+     * SPDY/3 only.
+     */
+    void flush() throws IOException;
+
+    void synStream(boolean outFinished, boolean inFinished, int streamId, int associatedStreamId,
+                   int priority, int slot, List<String> nameValueBlock) throws IOException;
+
+    void synReply(boolean outFinished, int streamId, List<String> nameValueBlock) throws IOException;
+
+    void headers(int streamId, List<String> nameValueBlock) throws IOException;
+
+    void rstStream(int streamId, ErrorCode errorCode) throws IOException;
+
+    void data(boolean outFinished, int streamId, byte[] data) throws IOException;
+
+    void data(boolean outFinished, int streamId, byte[] data, int offset, int byteCount)
+            throws IOException;
+
+    void settings(Settings settings) throws IOException;
+
+    void noop() throws IOException;
+
+    void ping(boolean reply, int payload1, int payload2) throws IOException;
+
+    void goAway(int lastGoodStreamId, ErrorCode errorCode) throws IOException;
+
+    void windowUpdate(int streamId, int deltaWindowSize) throws IOException;
 }

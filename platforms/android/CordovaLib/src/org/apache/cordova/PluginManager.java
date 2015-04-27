@@ -18,32 +18,25 @@
  */
 package org.apache.cordova;
 
-import java.util.HashMap;
-import java.util.List;
-
-import org.apache.cordova.CordovaWebView;
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaInterface;
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.PluginEntry;
-import org.apache.cordova.PluginResult;
-import org.json.JSONException;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Debug;
 import android.util.Log;
 
+import org.json.JSONException;
+
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * PluginManager is exposed to JavaScript in the Cordova WebView.
- *
+ * <p/>
  * Calling native plugin code can be done by calling PluginManager.exec(...)
  * from JavaScript.
  */
 public class PluginManager {
-    private static String TAG = "PluginManager";
     private static final int SLOW_EXEC_WARNING_THRESHOLD = Debug.isDebuggerConnected() ? 60 : 16;
-
+    private static String TAG = "PluginManager";
     // List of service entries
     private final HashMap<String, CordovaPlugin> pluginMap = new HashMap<String, CordovaPlugin>();
     private final HashMap<String, PluginEntry> entryMap = new HashMap<String, PluginEntry>();
@@ -123,19 +116,19 @@ public class PluginManager {
     /**
      * Receives a request for execution and fulfills it by finding the appropriate
      * Java class and calling it's execute method.
-     *
+     * <p/>
      * PluginManager.exec can be used either synchronously or async. In either case, a JSON encoded
      * string is returned that will indicate if any errors have occurred when trying to find
      * or execute the class denoted by the clazz argument.
      *
-     * @param service       String containing the service to run
-     * @param action        String containing the action that the class is supposed to perform. This is
-     *                      passed to the plugin execute method and it is up to the plugin developer
-     *                      how to deal with it.
-     * @param callbackId    String containing the id of the callback that is execute in JavaScript if
-     *                      this is an async plugin call.
-     * @param rawArgs       An Array literal string containing any arguments needed in the
-     *                      plugin execute method.
+     * @param service    String containing the service to run
+     * @param action     String containing the action that the class is supposed to perform. This is
+     *                   passed to the plugin execute method and it is up to the plugin developer
+     *                   how to deal with it.
+     * @param callbackId String containing the id of the callback that is execute in JavaScript if
+     *                   this is an async plugin call.
+     * @param rawArgs    An Array literal string containing any arguments needed in the
+     *                   plugin execute method.
      */
     public void exec(final String service, final String action, final String callbackId, final String rawArgs) {
         CordovaPlugin plugin = getPlugin(service);
@@ -177,8 +170,8 @@ public class PluginManager {
      * If the plugin object does not already exist, then create it.
      * If the service doesn't exist, then return null.
      *
-     * @param service       The name of the service.
-     * @return              CordovaPlugin or null
+     * @param service The name of the service.
+     * @return CordovaPlugin or null
      */
     public CordovaPlugin getPlugin(String service) {
         CordovaPlugin ret = pluginMap.get(service);
@@ -202,8 +195,8 @@ public class PluginManager {
      * Add a plugin class that implements a service to the service entry table.
      * This does not create the plugin object instance.
      *
-     * @param service           The service name
-     * @param className         The plugin class name
+     * @param service   The service name
+     * @param className The plugin class name
      */
     public void addService(String service, String className) {
         PluginEntry entry = new PluginEntry(service, className, false);
@@ -214,7 +207,7 @@ public class PluginManager {
      * Add a plugin class that implements a service to the service entry table.
      * This does not create the plugin object instance.
      *
-     * @param entry             The plugin entry
+     * @param entry The plugin entry
      */
     public void addService(PluginEntry entry) {
         this.entryMap.put(entry.service, entry);
@@ -232,7 +225,7 @@ public class PluginManager {
     /**
      * Called when the system is about to start resuming a previous activity.
      *
-     * @param multitasking      Flag indicating if multitasking is turned on for app
+     * @param multitasking Flag indicating if multitasking is turned on for app
      */
     public void onPause(boolean multitasking) {
         for (CordovaPlugin plugin : this.pluginMap.values()) {
@@ -246,13 +239,11 @@ public class PluginManager {
      * Called when the system received an HTTP authentication request. Plugins can use
      * the supplied HttpAuthHandler to process this auth challenge.
      *
-     * @param view              The WebView that is initiating the callback
-     * @param handler           The HttpAuthHandler used to set the WebView's response
-     * @param host              The host requiring authentication
-     * @param realm             The realm for which authentication is required
-     * 
-     * @return                  Returns True if there is a plugin which will resolve this auth challenge, otherwise False
-     * 
+     * @param view    The WebView that is initiating the callback
+     * @param handler The HttpAuthHandler used to set the WebView's response
+     * @param host    The host requiring authentication
+     * @param realm   The realm for which authentication is required
+     * @return Returns True if there is a plugin which will resolve this auth challenge, otherwise False
      */
     public boolean onReceivedHttpAuthRequest(CordovaWebView view, ICordovaHttpAuthHandler handler, String host, String realm) {
         for (CordovaPlugin plugin : this.pluginMap.values()) {
@@ -262,16 +253,14 @@ public class PluginManager {
         }
         return false;
     }
-    
+
     /**
      * Called when he system received an SSL client certificate request.  Plugin can use
      * the supplied ClientCertRequest to process this certificate challenge.
      *
-     * @param view              The WebView that is initiating the callback
-     * @param request           The client certificate request
-     *
-     * @return                  Returns True if plugin will resolve this auth challenge, otherwise False
-     *
+     * @param view    The WebView that is initiating the callback
+     * @param request The client certificate request
+     * @return Returns True if plugin will resolve this auth challenge, otherwise False
      */
     public boolean onReceivedClientCertRequest(CordovaWebView view, ICordovaClientCertRequest request) {
         for (CordovaPlugin plugin : this.pluginMap.values()) {
@@ -285,7 +274,7 @@ public class PluginManager {
     /**
      * Called when the activity will start interacting with the user.
      *
-     * @param multitasking      Flag indicating if multitasking is turned on for app
+     * @param multitasking Flag indicating if multitasking is turned on for app
      */
     public void onResume(boolean multitasking) {
         for (CordovaPlugin plugin : this.pluginMap.values()) {
@@ -309,9 +298,9 @@ public class PluginManager {
     /**
      * Send a message to all plugins.
      *
-     * @param id                The message id
-     * @param data              The message data
-     * @return                  Object to stop propagation or null
+     * @param id   The message id
+     * @param data The message data
+     * @return Object to stop propagation or null
      */
     public Object postMessage(String id, Object data) {
         Object obj = this.ctx.onMessage(id, data);
@@ -343,8 +332,8 @@ public class PluginManager {
     /**
      * Called when the URL of the webview changes.
      *
-     * @param url               The URL that is being changed to.
-     * @return                  Return false to allow the URL to load, return true to prevent the URL from loading.
+     * @param url The URL that is being changed to.
+     * @return Return false to allow the URL to load, return true to prevent the URL from loading.
      */
     public boolean onOverrideUrlLoading(String url) {
         // Deprecated way to intercept URLs. (process <url-filter> tags).

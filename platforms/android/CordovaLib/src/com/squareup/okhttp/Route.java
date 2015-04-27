@@ -18,74 +18,86 @@ package com.squareup.okhttp;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
-/** Represents the route used by a connection to reach an endpoint. */
+/**
+ * Represents the route used by a connection to reach an endpoint.
+ */
 public class Route {
-  final Address address;
-  final Proxy proxy;
-  final InetSocketAddress inetSocketAddress;
-  final boolean modernTls;
+    final Address address;
+    final Proxy proxy;
+    final InetSocketAddress inetSocketAddress;
+    final boolean modernTls;
 
-  public Route(Address address, Proxy proxy, InetSocketAddress inetSocketAddress,
-      boolean modernTls) {
-    if (address == null) throw new NullPointerException("address == null");
-    if (proxy == null) throw new NullPointerException("proxy == null");
-    if (inetSocketAddress == null) throw new NullPointerException("inetSocketAddress == null");
-    this.address = address;
-    this.proxy = proxy;
-    this.inetSocketAddress = inetSocketAddress;
-    this.modernTls = modernTls;
-  }
-
-  /** Returns the {@link Address} of this route. */
-  public Address getAddress() {
-    return address;
-  }
-
-  /**
-   * Returns the {@link Proxy} of this route.
-   *
-   * <strong>Warning:</strong> This may be different than the proxy returned
-   * by {@link #getAddress}! That is the proxy that the user asked to be
-   * connected to; this returns the proxy that they were actually connected
-   * to. The two may disagree when a proxy selector selects a different proxy
-   * for a connection.
-   */
-  public Proxy getProxy() {
-    return proxy;
-  }
-
-  /** Returns the {@link InetSocketAddress} of this route. */
-  public InetSocketAddress getSocketAddress() {
-    return inetSocketAddress;
-  }
-
-  /** Returns true if this route uses modern TLS. */
-  public boolean isModernTls() {
-    return modernTls;
-  }
-
-  /** Returns a copy of this route with flipped TLS mode. */
-  Route flipTlsMode() {
-    return new Route(address, proxy, inetSocketAddress, !modernTls);
-  }
-
-  @Override public boolean equals(Object obj) {
-    if (obj instanceof Route) {
-      Route other = (Route) obj;
-      return (address.equals(other.address)
-          && proxy.equals(other.proxy)
-          && inetSocketAddress.equals(other.inetSocketAddress)
-          && modernTls == other.modernTls);
+    public Route(Address address, Proxy proxy, InetSocketAddress inetSocketAddress,
+                 boolean modernTls) {
+        if (address == null) throw new NullPointerException("address == null");
+        if (proxy == null) throw new NullPointerException("proxy == null");
+        if (inetSocketAddress == null) throw new NullPointerException("inetSocketAddress == null");
+        this.address = address;
+        this.proxy = proxy;
+        this.inetSocketAddress = inetSocketAddress;
+        this.modernTls = modernTls;
     }
-    return false;
-  }
 
-  @Override public int hashCode() {
-    int result = 17;
-    result = 31 * result + address.hashCode();
-    result = 31 * result + proxy.hashCode();
-    result = 31 * result + inetSocketAddress.hashCode();
-    result = result + (modernTls ? (31 * result) : 0);
-    return result;
-  }
+    /**
+     * Returns the {@link Address} of this route.
+     */
+    public Address getAddress() {
+        return address;
+    }
+
+    /**
+     * Returns the {@link Proxy} of this route.
+     * <p/>
+     * <strong>Warning:</strong> This may be different than the proxy returned
+     * by {@link #getAddress}! That is the proxy that the user asked to be
+     * connected to; this returns the proxy that they were actually connected
+     * to. The two may disagree when a proxy selector selects a different proxy
+     * for a connection.
+     */
+    public Proxy getProxy() {
+        return proxy;
+    }
+
+    /**
+     * Returns the {@link InetSocketAddress} of this route.
+     */
+    public InetSocketAddress getSocketAddress() {
+        return inetSocketAddress;
+    }
+
+    /**
+     * Returns true if this route uses modern TLS.
+     */
+    public boolean isModernTls() {
+        return modernTls;
+    }
+
+    /**
+     * Returns a copy of this route with flipped TLS mode.
+     */
+    Route flipTlsMode() {
+        return new Route(address, proxy, inetSocketAddress, !modernTls);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Route) {
+            Route other = (Route) obj;
+            return (address.equals(other.address)
+                    && proxy.equals(other.proxy)
+                    && inetSocketAddress.equals(other.inetSocketAddress)
+                    && modernTls == other.modernTls);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + address.hashCode();
+        result = 31 * result + proxy.hashCode();
+        result = 31 * result + inetSocketAddress.hashCode();
+        result = result + (modernTls ? (31 * result) : 0);
+        return result;
+    }
 }

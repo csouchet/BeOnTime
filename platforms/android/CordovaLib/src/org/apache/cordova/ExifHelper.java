@@ -18,9 +18,9 @@
 */
 package org.apache.cordova;
 
-import java.io.IOException;
-
 import android.media.ExifInterface;
+
+import java.io.IOException;
 
 @Deprecated // Deprecated in 3.1. To be removed in 4.0.
 public class ExifHelper {

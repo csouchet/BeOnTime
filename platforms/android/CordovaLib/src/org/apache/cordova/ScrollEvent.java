@@ -28,7 +28,7 @@ import android.view.View;
 
 
 public class ScrollEvent {
-    
+
     public int l, t, nl, nt;
     private View targetView;
     
@@ -42,25 +42,24 @@ public class ScrollEvent {
      * @param ny
      * @param view
      */
-    
-    ScrollEvent(int nx, int ny, int x, int y, View view)
-    {
-        l = x; y = t; nl = nx; nt = ny;
+
+    ScrollEvent(int nx, int ny, int x, int y, View view) {
+        l = x;
+        y = t;
+        nl = nx;
+        nt = ny;
         targetView = view;
     }
-    
-    public int dl()
-    {
+
+    public int dl() {
         return nl - l;
     }
-    
-    public int dt()
-    {
+
+    public int dt() {
         return nt - t;
     }
-    
-    public View getTargetView()
-    {
+
+    public View getTargetView() {
         return targetView;
     }
 

@@ -21,43 +21,48 @@ import java.net.CacheRequest;
 
 import static com.squareup.okhttp.internal.Util.checkOffsetAndCount;
 
-/** An HTTP message body terminated by the end of the underlying stream. */
+/**
+ * An HTTP message body terminated by the end of the underlying stream.
+ */
 final class UnknownLengthHttpInputStream extends AbstractHttpInputStream {
-  private boolean inputExhausted;
+    private boolean inputExhausted;
 
-  UnknownLengthHttpInputStream(InputStream in, CacheRequest cacheRequest, HttpEngine httpEngine)
-      throws IOException {
-    super(in, httpEngine, cacheRequest);
-  }
+    UnknownLengthHttpInputStream(InputStream in, CacheRequest cacheRequest, HttpEngine httpEngine)
+            throws IOException {
+        super(in, httpEngine, cacheRequest);
+    }
 
-  @Override public int read(byte[] buffer, int offset, int count) throws IOException {
-    checkOffsetAndCount(buffer.length, offset, count);
-    checkNotClosed();
-    if (in == null || inputExhausted) {
-      return -1;
+    @Override
+    public int read(byte[] buffer, int offset, int count) throws IOException {
+        checkOffsetAndCount(buffer.length, offset, count);
+        checkNotClosed();
+        if (in == null || inputExhausted) {
+            return -1;
+        }
+        int read = in.read(buffer, offset, count);
+        if (read == -1) {
+            inputExhausted = true;
+            endOfInput();
+            return -1;
+        }
+        cacheWrite(buffer, offset, read);
+        return read;
     }
-    int read = in.read(buffer, offset, count);
-    if (read == -1) {
-      inputExhausted = true;
-      endOfInput();
-      return -1;
-    }
-    cacheWrite(buffer, offset, read);
-    return read;
-  }
 
-  @Override public int available() throws IOException {
-    checkNotClosed();
-    return in == null ? 0 : in.available();
-  }
+    @Override
+    public int available() throws IOException {
+        checkNotClosed();
+        return in == null ? 0 : in.available();
+    }
 
-  @Override public void close() throws IOException {
-    if (closed) {
-      return;
+    @Override
+    public void close() throws IOException {
+        if (closed) {
+            return;
+        }
+        closed = true;
+        if (!inputExhausted) {
+            unexpectedEndOfInput();
+        }
     }
-    closed = true;
-    if (!inputExhausted) {
-      unexpectedEndOfInput();
-    }
-  }
 }

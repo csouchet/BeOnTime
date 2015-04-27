@@ -21,25 +21,28 @@ import java.io.OutputStream;
 
 /**
  * An output stream for an HTTP request body.
- *
+ * <p/>
  * <p>Since a single socket's output stream may be used to write multiple HTTP
  * requests to the same server, subclasses should not close the socket stream.
  */
 public abstract class AbstractOutputStream extends OutputStream {
-  protected boolean closed;
+    protected boolean closed;
 
-  @Override public final void write(int data) throws IOException {
-    write(new byte[] { (byte) data });
-  }
-
-  protected final void checkNotClosed() throws IOException {
-    if (closed) {
-      throw new IOException("stream closed");
+    @Override
+    public final void write(int data) throws IOException {
+        write(new byte[]{(byte) data});
     }
-  }
 
-  /** Returns true if this stream was closed locally. */
-  public boolean isClosed() {
-    return closed;
-  }
+    protected final void checkNotClosed() throws IOException {
+        if (closed) {
+            throw new IOException("stream closed");
+        }
+    }
+
+    /**
+     * Returns true if this stream was closed locally.
+     */
+    public boolean isClosed() {
+        return closed;
+    }
 }

@@ -17,6 +17,7 @@
 package com.squareup.okhttp.internal.http;
 
 import com.squareup.okhttp.internal.AbstractOutputStream;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -30,46 +31,48 @@ import static com.squareup.okhttp.internal.Util.checkOffsetAndCount;
  * sent multiple times.
  */
 final class RetryableOutputStream extends AbstractOutputStream {
-  private final int limit;
-  private final ByteArrayOutputStream content;
+    private final int limit;
+    private final ByteArrayOutputStream content;
 
-  public RetryableOutputStream(int limit) {
-    this.limit = limit;
-    this.content = new ByteArrayOutputStream(limit);
-  }
-
-  public RetryableOutputStream() {
-    this.limit = -1;
-    this.content = new ByteArrayOutputStream();
-  }
-
-  @Override public synchronized void close() throws IOException {
-    if (closed) {
-      return;
+    public RetryableOutputStream(int limit) {
+        this.limit = limit;
+        this.content = new ByteArrayOutputStream(limit);
     }
-    closed = true;
-    if (content.size() < limit) {
-      throw new ProtocolException(
-          "content-length promised " + limit + " bytes, but received " + content.size());
+
+    public RetryableOutputStream() {
+        this.limit = -1;
+        this.content = new ByteArrayOutputStream();
     }
-  }
 
-  @Override public synchronized void write(byte[] buffer, int offset, int count)
-      throws IOException {
-    checkNotClosed();
-    checkOffsetAndCount(buffer.length, offset, count);
-    if (limit != -1 && content.size() > limit - count) {
-      throw new ProtocolException("exceeded content-length limit of " + limit + " bytes");
+    @Override
+    public synchronized void close() throws IOException {
+        if (closed) {
+            return;
+        }
+        closed = true;
+        if (content.size() < limit) {
+            throw new ProtocolException(
+                    "content-length promised " + limit + " bytes, but received " + content.size());
+        }
     }
-    content.write(buffer, offset, count);
-  }
 
-  public synchronized int contentLength() throws IOException {
-    close();
-    return content.size();
-  }
+    @Override
+    public synchronized void write(byte[] buffer, int offset, int count)
+            throws IOException {
+        checkNotClosed();
+        checkOffsetAndCount(buffer.length, offset, count);
+        if (limit != -1 && content.size() > limit - count) {
+            throw new ProtocolException("exceeded content-length limit of " + limit + " bytes");
+        }
+        content.write(buffer, offset, count);
+    }
 
-  public void writeToSocket(OutputStream socketOut) throws IOException {
-    content.writeTo(socketOut);
-  }
+    public synchronized int contentLength() throws IOException {
+        close();
+        return content.size();
+    }
+
+    public void writeToSocket(OutputStream socketOut) throws IOException {
+        content.writeTo(socketOut);
+    }
 }

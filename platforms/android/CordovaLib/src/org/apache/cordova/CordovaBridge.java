@@ -18,13 +18,12 @@
 */
 package org.apache.cordova;
 
-import java.security.SecureRandom;
+import android.util.Log;
 
-import org.apache.cordova.PluginManager;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import android.util.Log;
+import java.security.SecureRandom;
 
 /**
  * Contains APIs that the JS can call. All functions in here should also have
@@ -106,12 +105,16 @@ public class CordovaBridge {
         return true;
     }
 
-    /** Called on page transitions */
+    /**
+     * Called on page transitions
+     */
     void clearBridgeSecret() {
         expectedBridgeSecret = -1;
     }
 
-    /** Called by cordova.js to initialize the bridge. */
+    /**
+     * Called by cordova.js to initialize the bridge.
+     */
     int generateBridgeSecret() {
         SecureRandom randGen = new SecureRandom();
         expectedBridgeSecret = randGen.nextInt(Integer.MAX_VALUE);
@@ -120,7 +123,7 @@ public class CordovaBridge {
 
     public void reset(String loadedUrl) {
         jsMessageQueue.reset();
-        clearBridgeSecret();        
+        clearBridgeSecret();
         this.loadedUrl = loadedUrl;
     }
 
@@ -147,7 +150,7 @@ public class CordovaBridge {
             try {
                 int bridgeSecret = Integer.parseInt(defaultValue.substring(16));
                 jsSetNativeToJsBridgeMode(bridgeSecret, Integer.parseInt(message));
-            } catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -164,20 +167,19 @@ public class CordovaBridge {
                 e.printStackTrace();
             }
             return "";
-        }
-        else if (defaultValue != null && defaultValue.startsWith("gap_init:")) {
+        } else if (defaultValue != null && defaultValue.startsWith("gap_init:")) {
             // Protect against random iframes being able to talk through the bridge.
             // Trust only file URLs and the start URL's domain.
             // The extra origin.startsWith("http") is to protect against iframes with data: having "" as origin.
             if (origin.startsWith("file:") ||
-                origin.startsWith(this.appContentUrlPrefix) ||
-                (origin.startsWith("http") && loadedUrl.startsWith(origin))) {
+                    origin.startsWith(this.appContentUrlPrefix) ||
+                    (origin.startsWith("http") && loadedUrl.startsWith(origin))) {
                 // Enable the bridge
                 int bridgeMode = Integer.parseInt(defaultValue.substring(9));
                 jsMessageQueue.setBridgeMode(bridgeMode);
                 // Tell JS the bridge secret.
                 int secret = generateBridgeSecret();
-                return ""+secret;
+                return "" + secret;
             } else {
                 Log.e(LOG_TAG, "gap_init called from restricted origin: " + origin);
             }
@@ -185,7 +187,7 @@ public class CordovaBridge {
         }
         return null;
     }
-    
+
     public NativeToJsMessageQueue getMessageQueue() {
         return jsMessageQueue;
     }

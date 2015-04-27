@@ -17,43 +17,43 @@ package com.squareup.okhttp;
 
 /**
  * A failure attempting to retrieve an HTTP response.
- *
+ * <p/>
  * <h3>Warning: Experimental OkHttp 2.0 API</h3>
  * This class is in beta. APIs are subject to change!
  */
 /* OkHttp 2.0: public */ class Failure {
-  private final Request request;
-  private final Throwable exception;
+    private final Request request;
+    private final Throwable exception;
 
-  private Failure(Builder builder) {
-    this.request = builder.request;
-    this.exception = builder.exception;
-  }
-
-  public Request request() {
-    return request;
-  }
-
-  public Throwable exception() {
-    return exception;
-  }
-
-  public static class Builder {
-    private Request request;
-    private Throwable exception;
-
-    public Builder request(Request request) {
-      this.request = request;
-      return this;
+    private Failure(Builder builder) {
+        this.request = builder.request;
+        this.exception = builder.exception;
     }
 
-    public Builder exception(Throwable exception) {
-      this.exception = exception;
-      return this;
+    public Request request() {
+        return request;
     }
 
-    public Failure build() {
-      return new Failure(this);
+    public Throwable exception() {
+        return exception;
     }
-  }
+
+    public static class Builder {
+        private Request request;
+        private Throwable exception;
+
+        public Builder request(Request request) {
+            this.request = request;
+            return this;
+        }
+
+        public Builder exception(Throwable exception) {
+            this.exception = exception;
+            return this;
+        }
+
+        public Failure build() {
+            return new Failure(this);
+        }
+    }
 }

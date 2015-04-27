@@ -1,0 +1,16 @@
+<!--
+    Copyright 2015 Souchet Céline
+-->
+<ion-view view-title="Add new contacts">
+    <ion-content class="padding">
+        <p>Total number of contacts: {{phoneContacts.length}}</p>
+        <ion-list>
+            <ion-item class="item-checkbox item-avatar item-icon-right" ng-repeat="phoneContact in phoneContacts" type="item-text-wrap">
+                <img ng-src="{{phoneContact.photos[0]}}">
+                <h2>{{phoneContact.name.familyName}} {{phoneContact.name.givenName}}</h2>
+                <!--<i class="checkbox-icon ion-checkmark"/>-->
+            </ion-item>
+        </ion-list>
+        <!--<button class="button" ng-click="importPhoneContacts()">Importer</button>-->
+    </ion-content>
+</ion-view>

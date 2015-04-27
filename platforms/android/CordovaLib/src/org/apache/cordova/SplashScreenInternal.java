@@ -207,8 +207,7 @@ public class SplashScreenInternal extends CordovaPlugin {
         String loading = null;
         if (webView.canGoBack()) {
             loading = preferences.getString("LoadingDialog", null);
-        }
-        else {
+        } else {
             loading = preferences.getString("LoadingPageDialog", null);
         }
         if (loading != null) {
@@ -220,8 +219,7 @@ public class SplashScreenInternal extends CordovaPlugin {
                 if (comma > 0) {
                     title = loading.substring(0, comma);
                     message = loading.substring(comma + 1);
-                }
-                else {
+                } else {
                     title = "";
                     message = loading;
                 }

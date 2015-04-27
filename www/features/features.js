@@ -1,64 +1,37 @@
-angular.module('org.beontime.features', ['org.beontime.features.message',
-	'org.beontime.features.favorites',
-	'org.beontime.features.contacts'])
-	
-.config(function($stateProvider, $urlRouterProvider) {
+/**
+ * Copyright 2015 Souchet Céline
+ */
 
-  // Ionic uses AngularUI Router which uses the concept of states
-  // Learn more here: https://github.com/angular-ui/ui-router
-  // Set up the various states which the app can be in.
-  // Each state's controller can be found in controllers.js
-  $stateProvider
+angular.module('org.beontime.features', ['org.beontime.features.contacts'])
 
-  // setup an abstract state for the tabs directive
-	.state('tab', {
-	url: "/tab",
-	abstract: true,
-	templateUrl: "features/tabs.html"
-  })
+.config(function ($stateProvider, $urlRouterProvider) {
 
-  // Each tab has its own nav history stack:
+	// Ionic uses AngularUI Router which uses the concept of states
+	// Learn more here: https://github.com/angular-ui/ui-router
+	// Set up the various states which the app can be in.
+	// Each state's controller can be found in controllers.js
+	$stateProvider
 
-  .state('tab.message', {
-	url: '/message',
-	views: {
-	  'tab-message': {
-		templateUrl: 'features/message/tab-message.html',
-		controller: 'MessageCtrl'
-	  }
-	}
-  })
+	// setup an abstract state for the tabs directive
+	.state('tabs', {
+		url : "/tab",
+		abstract : true,
+		templateUrl : "features/tabs.html"
+	})
 
-  .state('tab.favorites', {
-  	url: '/favorites',
-  	views: {
-  	  'tab-favorites': {
-  		templateUrl: 'features/favorites/tab-favorites.html',
-  		controller: 'FavoritesCtrl'
-  	  }
-  	}
-  })
+	// Each tab has its own nav history stack:
 
-  .state('tab.contacts', {
-	  url: '/contacts',
-	  views: {
-		'tab-contacts': {
-		  templateUrl: 'features/contacts/tab-contacts.html',
-		  controller: 'ContactsCtrl'
+	.state('tabs.contact-add', {
+		url : '/contacts/add',
+		views : {
+			'contacts-tab' : {
+				templateUrl : 'features/contacts/phone/add.html',
+				controller : 'PhoneContactsCtrl'
+			}
 		}
-	  }
-  })
-  .state('tab.contact-detail', {
-	  url: '/contacts/:contactId',
-	  views: {
-		'tab-contacts': {
-		  templateUrl: 'features/contacts/contact-detail.html',
-		  controller: 'ContactDetailCtrl'
-		}
-	  }
-  });
+	});
 
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/message');
+	// if none of the above states are matched, use this as the fallback
+	$urlRouterProvider.otherwise('/tab/contacts/add');
 
 });

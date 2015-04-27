@@ -27,30 +27,36 @@ import java.util.Map;
 /**
  * An extended response cache API. Unlike {@link java.net.ResponseCache}, this
  * interface supports conditional caching and statistics.
- *
+ * <p/>
  * <h3>Warning: Experimental OkHttp 2.0 API</h3>
  * This class is in beta. APIs are subject to change!
  */
 public interface OkResponseCache {
-  CacheResponse get(URI uri, String requestMethod, Map<String, List<String>> requestHeaders)
-      throws IOException;
+    CacheResponse get(URI uri, String requestMethod, Map<String, List<String>> requestHeaders)
+            throws IOException;
 
-  CacheRequest put(URI uri, URLConnection urlConnection) throws IOException;
+    CacheRequest put(URI uri, URLConnection urlConnection) throws IOException;
 
-  /** Remove any cache entries for the supplied {@code uri} if the request method invalidates. */
-  void maybeRemove(String requestMethod, URI uri) throws IOException;
+    /**
+     * Remove any cache entries for the supplied {@code uri} if the request method invalidates.
+     */
+    void maybeRemove(String requestMethod, URI uri) throws IOException;
 
-  /**
-   * Handles a conditional request hit by updating the stored cache response
-   * with the headers from {@code httpConnection}. The cached response body is
-   * not updated. If the stored response has changed since {@code
-   * conditionalCacheHit} was returned, this does nothing.
-   */
-  void update(CacheResponse conditionalCacheHit, HttpURLConnection connection) throws IOException;
+    /**
+     * Handles a conditional request hit by updating the stored cache response
+     * with the headers from {@code httpConnection}. The cached response body is
+     * not updated. If the stored response has changed since {@code
+     * conditionalCacheHit} was returned, this does nothing.
+     */
+    void update(CacheResponse conditionalCacheHit, HttpURLConnection connection) throws IOException;
 
-  /** Track an conditional GET that was satisfied by this cache. */
-  void trackConditionalCacheHit();
+    /**
+     * Track an conditional GET that was satisfied by this cache.
+     */
+    void trackConditionalCacheHit();
 
-  /** Track an HTTP response being satisfied by {@code source}. */
-  void trackResponse(ResponseSource source);
+    /**
+     * Track an HTTP response being satisfied by {@code source}.
+     */
+    void trackResponse(ResponseSource source);
 }

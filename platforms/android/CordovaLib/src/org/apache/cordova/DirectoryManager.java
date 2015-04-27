@@ -18,16 +18,16 @@
 */
 package org.apache.cordova;
 
-import java.io.File;
-
 import android.content.Context;
 import android.os.Environment;
 import android.os.StatFs;
 
+import java.io.File;
+
 /**
  * This class provides file directory utilities.
  * All file operations are performed on the SD card.
- *
+ * <p/>
  * It is used by the FileUtils class.
  */
 @Deprecated // Deprecated in 3.1. To be removed in 4.0.
@@ -38,8 +38,9 @@ public class DirectoryManager {
 
     /**
      * Determine if a file or directory exists.
-     * @param name				The name of the file to check.
-     * @return					T=exists, F=not found
+     *
+     * @param name The name of the file to check.
+     * @return T=exists, F=not found
      */
     public static boolean testFileExists(String name) {
         boolean status;
@@ -59,8 +60,8 @@ public class DirectoryManager {
 
     /**
      * Get the free disk space
-     * 
-     * @return 		Size in KB or -1 if not available
+     *
+     * @return Size in KB or -1 if not available
      */
     public static long getFreeDiskSpace(boolean checkInternal) {
         String status = Environment.getExternalStorageState();
@@ -69,8 +70,7 @@ public class DirectoryManager {
         // If SD card exists
         if (status.equals(Environment.MEDIA_MOUNTED)) {
             freeSpace = freeSpaceCalculation(Environment.getExternalStorageDirectory().getPath());
-        }
-        else if (checkInternal) {
+        } else if (checkInternal) {
             freeSpace = freeSpaceCalculation("/");
         }
         // If no SD card and we haven't been asked to check the internal directory then return -1
@@ -83,7 +83,7 @@ public class DirectoryManager {
 
     /**
      * Given a path return the number of free KB
-     * 
+     *
      * @param path to the file system
      * @return free space in KB
      */
@@ -96,8 +96,8 @@ public class DirectoryManager {
 
     /**
      * Determine if SD card exists.
-     * 
-     * @return				T=exists, F=not found
+     *
+     * @return T=exists, F=not found
      */
     public static boolean testSaveLocationExists() {
         String sDCardStatus = Environment.getExternalStorageState();
@@ -118,16 +118,15 @@ public class DirectoryManager {
     /**
      * Create a new file object from two file paths.
      *
-     * @param file1			Base file path
-     * @param file2			Remaining file path
-     * @return				File object
+     * @param file1 Base file path
+     * @param file2 Remaining file path
+     * @return File object
      */
-    private static File constructFilePaths (String file1, String file2) {
+    private static File constructFilePaths(String file1, String file2) {
         File newPath;
         if (file2.startsWith(file1)) {
             newPath = new File(file2);
-        }
-        else {
+        } else {
             newPath = new File(file1 + "/" + file2);
         }
         return newPath;

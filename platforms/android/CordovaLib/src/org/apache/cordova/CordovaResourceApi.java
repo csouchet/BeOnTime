@@ -48,28 +48,25 @@ import java.util.Locale;
 /**
  * What this class provides:
  * 1. Helpers for reading & writing to URLs.
- *   - E.g. handles assets, resources, content providers, files, data URIs, http[s]
- *   - E.g. Can be used to query for mime-type & content length.
- *
+ * - E.g. handles assets, resources, content providers, files, data URIs, http[s]
+ * - E.g. Can be used to query for mime-type & content length.
+ * <p/>
  * 2. To allow plugins to redirect URLs (via remapUrl).
- *   - All plugins should call remapUrl() on URLs they receive from JS *before*
- *     passing the URL onto other utility functions in this class.
- *   - For an example usage of this, refer to the org.apache.cordova.file plugin.
- *
+ * - All plugins should call remapUrl() on URLs they receive from JS *before*
+ * passing the URL onto other utility functions in this class.
+ * - For an example usage of this, refer to the org.apache.cordova.file plugin.
+ * <p/>
  * 3. It exposes a way to use the OkHttp library that ships with Cordova.
- *   - Through createHttpConnection().
- *
+ * - Through createHttpConnection().
+ * <p/>
  * Future Work:
- *   - Consider using a Cursor to query content URLs for their size (like the file plugin does).
- *   - Allow plugins to remapUri to "cdv-plugin://plugin-name/$ID", which CordovaResourceApi
- *     would then delegate to pluginManager.getPlugin(plugin-name).openForRead($ID)
- *     - Currently, plugins *can* do this by remapping to a data: URL, but it's inefficient
- *       for large payloads.
+ * - Consider using a Cursor to query content URLs for their size (like the file plugin does).
+ * - Allow plugins to remapUri to "cdv-plugin://plugin-name/$ID", which CordovaResourceApi
+ * would then delegate to pluginManager.getPlugin(plugin-name).openForRead($ID)
+ * - Currently, plugins *can* do this by remapping to a data: URL, but it's inefficient
+ * for large payloads.
  */
 public class CordovaResourceApi {
-    @SuppressWarnings("unused")
-    private static final String LOG_TAG = "CordovaResourceApi";
-
     public static final int URI_TYPE_FILE = 0;
     public static final int URI_TYPE_ASSET = 1;
     public static final int URI_TYPE_CONTENT = 2;
@@ -78,14 +75,12 @@ public class CordovaResourceApi {
     public static final int URI_TYPE_HTTP = 5;
     public static final int URI_TYPE_HTTPS = 6;
     public static final int URI_TYPE_UNKNOWN = -1;
-    
-    private static final String[] LOCAL_FILE_PROJECTION = { "_data" };
-    
+    @SuppressWarnings("unused")
+    private static final String LOG_TAG = "CordovaResourceApi";
+    private static final String[] LOCAL_FILE_PROJECTION = {"_data"};
+    static Thread jsThread;
     // Creating this is light-weight.
     private static OkHttpClient httpClient = new OkHttpClient();
-    
-    static Thread jsThread;
-
     private final AssetManager assetManager;
     private final ContentResolver contentResolver;
     private final PluginManager pluginManager;
@@ -97,16 +92,7 @@ public class CordovaResourceApi {
         this.assetManager = context.getAssets();
         this.pluginManager = pluginManager;
     }
-    
-    public void setThreadCheckingEnabled(boolean value) {
-        threadCheckingEnabled = value;
-    }
 
-    public boolean isThreadCheckingEnabled() {
-        return threadCheckingEnabled;
-    }
-    
-    
     public static int getUriType(Uri uri) {
         assertNonRelative(uri);
         String scheme = uri.getScheme();
@@ -133,7 +119,21 @@ public class CordovaResourceApi {
         }
         return URI_TYPE_UNKNOWN;
     }
-    
+
+    private static void assertNonRelative(Uri uri) {
+        if (!uri.isAbsolute()) {
+            throw new IllegalArgumentException("Relative URIs are not supported.");
+        }
+    }
+
+    public boolean isThreadCheckingEnabled() {
+        return threadCheckingEnabled;
+    }
+
+    public void setThreadCheckingEnabled(boolean value) {
+        threadCheckingEnabled = value;
+    }
+
     public Uri remapUri(Uri uri) {
         assertNonRelative(uri);
         Uri pluginUri = pluginManager.remapUri(uri);
@@ -143,7 +143,7 @@ public class CordovaResourceApi {
     public String remapPath(String path) {
         return remapUri(Uri.fromFile(new File(path))).getPath();
     }
-    
+
     /**
      * Returns a File that points to the resource, or null if the resource
      * is not on the local filesystem.
@@ -173,7 +173,7 @@ public class CordovaResourceApi {
         }
         return null;
     }
-    
+
     public String getMimeType(Uri uri) {
         switch (getUriType(uri)) {
             case URI_TYPE_FILE:
@@ -196,11 +196,10 @@ public class CordovaResourceApi {
                 }
             }
         }
-        
+
         return null;
     }
-    
-    
+
     //This already exists
     private String getMimeTypeFromPath(String path) {
         String extension = path;
@@ -218,12 +217,13 @@ public class CordovaResourceApi {
         }
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
     }
-    
+
     /**
      * Opens a stream to the given URI, also providing the MIME type & length.
+     *
      * @return Never returns null.
      * @throws Throws an InvalidArgumentException for relative URIs. Relative URIs should be
-     *     resolved before being passed into this function.
+     *                resolved before being passed into this function.
      * @throws Throws an IOException if the URI cannot be opened.
      * @throws Throws an IllegalStateException if called on a foreground thread.
      */
@@ -233,9 +233,10 @@ public class CordovaResourceApi {
 
     /**
      * Opens a stream to the given URI, also providing the MIME type & length.
+     *
      * @return Never returns null.
      * @throws Throws an InvalidArgumentException for relative URIs. Relative URIs should be
-     *     resolved before being passed into this function.
+     *                resolved before being passed into this function.
      * @throws Throws an IOException if the URI cannot be opened.
      * @throws Throws an IllegalStateException if called on a foreground thread and skipThreadCheck is false.
      */
@@ -300,9 +301,10 @@ public class CordovaResourceApi {
 
     /**
      * Opens a stream to the given URI.
+     *
      * @return Never returns null.
      * @throws Throws an InvalidArgumentException for relative URIs. Relative URIs should be
-     *     resolved before being passed into this function.
+     *                resolved before being passed into this function.
      * @throws Throws an IOException if the URI cannot be opened.
      */
     public OutputStream openOutputStream(Uri uri, boolean append) throws IOException {
@@ -324,12 +326,12 @@ public class CordovaResourceApi {
         }
         throw new FileNotFoundException("URI not supported by CordovaResourceApi: " + uri);
     }
-    
+
     public HttpURLConnection createHttpConnection(Uri uri) throws IOException {
         assertBackgroundThread();
         return httpClient.open(new URL(uri.toString()));
     }
-    
+
     // Copies the input to the output in the most efficient manner possible.
     // Closes both streams.
     public void copyResource(OpenForReadResult input, OutputStream outputStream) throws IOException {
@@ -337,8 +339,8 @@ public class CordovaResourceApi {
         try {
             InputStream inputStream = input.inputStream;
             if (inputStream instanceof FileInputStream && outputStream instanceof FileOutputStream) {
-                FileChannel inChannel = ((FileInputStream)input.inputStream).getChannel();
-                FileChannel outChannel = ((FileOutputStream)outputStream).getChannel();
+                FileChannel inChannel = ((FileInputStream) input.inputStream).getChannel();
+                FileChannel outChannel = ((FileOutputStream) outputStream).getChannel();
                 long offset = 0;
                 long length = input.length;
                 if (input.assetFd != null) {
@@ -348,16 +350,16 @@ public class CordovaResourceApi {
             } else {
                 final int BUFFER_SIZE = 8192;
                 byte[] buffer = new byte[BUFFER_SIZE];
-                
-                for (;;) {
+
+                for (; ; ) {
                     int bytesRead = inputStream.read(buffer, 0, BUFFER_SIZE);
-                    
+
                     if (bytesRead <= 0) {
                         break;
                     }
                     outputStream.write(buffer, 0, bytesRead);
                 }
-            }            
+            }
         } finally {
             input.inputStream.close();
             if (outputStream != null) {
@@ -374,7 +376,7 @@ public class CordovaResourceApi {
     public void copyResource(Uri sourceUri, Uri dstUri) throws IOException {
         copyResource(openForRead(sourceUri), openOutputStream(dstUri));
     }
-    
+
     private void assertBackgroundThread() {
         if (threadCheckingEnabled) {
             Thread curThread = Thread.currentThread();
@@ -386,7 +388,7 @@ public class CordovaResourceApi {
             }
         }
     }
-    
+
     private String getDataUriMimeType(Uri uri) {
         String uriAsString = uri.getSchemeSpecificPart();
         int commaPos = uriAsString.indexOf(',');
@@ -422,20 +424,14 @@ public class CordovaResourceApi {
         InputStream inputStream = new ByteArrayInputStream(data);
         return new OpenForReadResult(uri, inputStream, contentType, data.length, null);
     }
-    
-    private static void assertNonRelative(Uri uri) {
-        if (!uri.isAbsolute()) {
-            throw new IllegalArgumentException("Relative URIs are not supported.");
-        }
-    }
-    
+
     public static final class OpenForReadResult {
         public final Uri uri;
         public final InputStream inputStream;
         public final String mimeType;
         public final long length;
         public final AssetFileDescriptor assetFd;
-        
+
         OpenForReadResult(Uri uri, InputStream inputStream, String mimeType, long length, AssetFileDescriptor assetFd) {
             this.uri = uri;
             this.inputStream = inputStream;

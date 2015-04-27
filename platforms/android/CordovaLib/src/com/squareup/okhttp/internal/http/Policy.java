@@ -20,30 +20,45 @@ import java.net.Proxy;
 import java.net.URL;
 
 public interface Policy {
-  /** Returns true if HTTP response caches should be used. */
-  boolean getUseCaches();
+    /**
+     * Returns true if HTTP response caches should be used.
+     */
+    boolean getUseCaches();
 
-  /** Returns the HttpURLConnection instance to store in the cache. */
-  HttpURLConnection getHttpConnectionToCache();
+    /**
+     * Returns the HttpURLConnection instance to store in the cache.
+     */
+    HttpURLConnection getHttpConnectionToCache();
 
-  /** Returns the current destination URL, possibly a redirect. */
-  URL getURL();
+    /**
+     * Returns the current destination URL, possibly a redirect.
+     */
+    URL getURL();
 
-  /** Returns the If-Modified-Since timestamp, or 0 if none is set. */
-  long getIfModifiedSince();
+    /**
+     * Returns the If-Modified-Since timestamp, or 0 if none is set.
+     */
+    long getIfModifiedSince();
 
-  /** Returns true if a non-direct proxy is specified. */
-  boolean usingProxy();
+    /**
+     * Returns true if a non-direct proxy is specified.
+     */
+    boolean usingProxy();
 
-  /** @see java.net.HttpURLConnection#setChunkedStreamingMode(int) */
-  int getChunkLength();
+    /**
+     * @see java.net.HttpURLConnection#setChunkedStreamingMode(int)
+     */
+    int getChunkLength();
 
-  /** @see java.net.HttpURLConnection#setFixedLengthStreamingMode(int) */
-  long getFixedContentLength();
+    /**
+     * @see java.net.HttpURLConnection#setFixedLengthStreamingMode(int)
+     */
+    long getFixedContentLength();
 
-  /**
-   * Sets the current proxy that this connection is using.
-   * @see java.net.HttpURLConnection#usingProxy
-   */
-  void setSelectedProxy(Proxy proxy);
+    /**
+     * Sets the current proxy that this connection is using.
+     *
+     * @see java.net.HttpURLConnection#usingProxy
+     */
+    void setSelectedProxy(Proxy proxy);
 }

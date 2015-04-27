@@ -11,6 +11,9 @@ angular.module('org.beontime.features.contacts.phone-controller', ['ionic'])
 		}, function (error) {
 			console.log(error);
 		});
+
+		// To delete later
+		BeOnTimeContactsFactory.initDB();
 	});
 
 	$scope.importPhoneContacts = function () {

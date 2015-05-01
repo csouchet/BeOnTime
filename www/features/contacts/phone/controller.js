@@ -9,11 +9,8 @@ angular.module('org.beontime.features.contacts.phone.controller', ['ionic'])
 		PhoneContactsFactory.all().then(function (contacts) {
 			$scope.phoneContacts = contacts;
 		}, function (error) {
-			console.log(error);
+			console.log("Can't find the contacts in the Phone : " + error);
 		});
-
-		// To delete later
-		BeOnTimeContactsFactory.initDB();
 	});
 
 	$scope.importPhoneContacts = function () {
@@ -24,11 +21,11 @@ angular.module('org.beontime.features.contacts.phone.controller', ['ionic'])
 			var email = PhoneContactsFactory.getPreferred(phoneContact.emails);
 			var contact = {
 				id : phoneContact.id,
-				familyName : phoneContact.name.familyName,
-				givenName : phoneContact.name.givenName,
-				photo : photo,
-				phoneNumber : phoneNumber,
-				email : email,
+				familyName : (phoneContact.name.familyName != null) ? phoneContact.name.familyName : "",
+				givenName : (phoneContact.name.givenName != null) ? phoneContact.name.givenName : "",
+				photo : (photo != null) ? photo : "img/ionic.png",
+				phoneNumber : (phoneNumber != null) ? phoneNumber : "",
+				email : (email != null) ? email : "",
 				state : 'AT_TIME',
 				stateTime : 0,
 				isFavorite : false
@@ -36,7 +33,8 @@ angular.module('org.beontime.features.contacts.phone.controller', ['ionic'])
 			BeOnTimeContactsFactory.create(contact);
 		}
 
-		$scope.contacts = BeOnTimeContactsFactory.all();
+		$ionicHistory.clearCache();
 		$ionicHistory.goBack();
 	}
+
 }]);

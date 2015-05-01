@@ -10,6 +10,20 @@ angular.module('org.beontime.features.contacts.phone.service', [])
         // onSuccess: Get a snapshot of the current contacts
         function onSuccess(contacts) {
             $rootScope.$apply(function () {
+                contacts.sort(function (a, b) {
+                    if (a.name.givenName > b.name.givenName)
+                        return 1;
+                    if (a.name.givenName < b.name.givenName)
+                        return -1;
+
+                    if (a.name.familyName > b.name.familyName)
+                        return 1;
+                    if (a.name.familyName < b.name.familyName)
+                        return -1;
+
+                    // a doit être égale à b
+                    return 0;
+                });
                 deferred.resolve(contacts);
             });
         }

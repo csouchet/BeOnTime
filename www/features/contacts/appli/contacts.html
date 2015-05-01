@@ -1,0 +1,23 @@
+<!--
+    Copyright 2015 Souchet Céline
+-->
+<ion-view view-title="Contacts" cache-view="false">
+
+    <ion-content class="padding" >
+        <p>Total number of contacts: {{contacts.length}}</p>
+        <ion-list>
+            <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="contact in contacts"
+                      type="item-text-wrap" href="#/tab/contacts/{{contact.id}}">
+                <img ng-src="{{contact.photo}}">
+
+                <h2>{{contact.givenName}} {{contact.familyName}}</h2>
+                <!--<i class="icon ion-chevron-right icon-accessory"/>-->
+            </ion-item>
+        </ion-list>
+    </ion-content>
+
+    <!-- Don't put this before the content. The content take the height of the nav-buttons, and we can't see it :( -->
+    <ion-nav-buttons side="right">
+        <a class="button button-light icon ion-android-person-add" nav-direction="enter" href="#/tab/contacts/add"/>
+    </ion-nav-buttons>
+</ion-view>

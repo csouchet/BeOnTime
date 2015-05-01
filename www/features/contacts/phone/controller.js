@@ -2,7 +2,7 @@
  * Copyright 2015 Souchet Céline
  */
 
-angular.module('org.beontime.features.contacts.phone-controller', ['ionic'])
+angular.module('org.beontime.features.contacts.phone.controller', ['ionic'])
 
 .controller('PhoneContactsCtrl', ['$scope', '$ionicHistory', 'BeOnTimeContactsFactory', 'PhoneContactsFactory', function ($scope, $ionicHistory, BeOnTimeContactsFactory, PhoneContactsFactory ) {
 	ionic.Platform.ready(function () {
